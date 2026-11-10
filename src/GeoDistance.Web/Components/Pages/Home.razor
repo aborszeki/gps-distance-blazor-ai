@@ -1,0 +1,128 @@
+@page "/"
+@using GeoDistance.Domain.Music
+@inherits LocalizedComponentBase
+@inject AudioPlayer Audio
+@inject IDistanceCalculator DistanceCalculator
+@inject IPlaceCatalog PlaceCatalog
+@inject ITuneCatalog TuneCatalog
+
+<PageTitle>@L["title"]</PageTitle>
+
+<div class="page surface-large">
+  <LanguageSwitcher />
+  <h1>@L["title"]</h1>
+
+  <div class="row">
+    <div class="fields">
+      <label for="from">@L["from"]</label>
+      <PlaceCombo Id="from" Input="from" Placeholder="@L["phFrom"]" />
+
+      <label for="to">@L["to"]</label>
+      <PlaceCombo Id="to" Input="to" Placeholder="@L["phTo"]" />
+    </div>
+    <button type="button" class="button-secondary reset" @onclick="Reset">@L["reset"]</button>
+  </div>
+
+  <label for="model">@L["model"]</label>
+  <div class="field selectbox">
+    <select id="model" @bind="modelKey" @bind:after="ClearOutput">
+      @foreach (var model in EarthModels.All)
+      {
+        <option value="@model.Key">@model.Label</option>
+      }
+    </select>
+    <span class="caret" aria-hidden="true">&#9662;</span>
+  </div>
+
+  <button type="button" class="calc" @onclick="CalculateAsync">@L["calc"]</button>
+
+  <div class="result @(errorKey is null ? null : "error")" aria-live="polite">@ResultText</div>
+  <div class="tune">@TuneText</div>
+
+  @if (calculation is { } shown)
+  {
+    <TravelCards Kilometers="@shown.RoundedKilometers" />
+  }
+</div>
+
+<MapDialog Request="map" OnClose="CloseMap" />
+
+@code {
+  private readonly LocationInput from = new();
+  private readonly LocationInput to = new();
+  private string modelKey = EarthModels.Default.Key;
+
+  private Calculation? calculation;
+  private string? errorKey;
+  private MapRequest? map;
+
+  private string ResultText => errorKey is not null
+      ? L[errorKey]
+      : calculation is { } c
+          ? $"{Format(c.RoundedKilometers)} {L["km"]} ({Format(c.RoundedMiles)} {L["mi"]}) · {c.Model.Name}"
+          : "";
+
+  private string TuneText => calculation is { Tune.HasAttribution: true } c ? $"♪ {c.Tune.Composer} – {c.Tune.Piece}" : "";
+
+  private async Task CalculateAsync()
+  {
+    await Audio.UnlockAsync(); // first: browsers only allow sound inside the click gesture
+
+    if (!from.TryGetPoint(out var a) || !to.TryGetPoint(out var b))
+    {
+      Fail("needBoth");
+      return;
+    }
+
+    if (!a.IsValid || !b.IsValid)
+    {
+      Fail("invalid");
+      return;
+    }
+
+    var model = EarthModels.Resolve(modelKey) ?? EarthModels.Default;
+    var distance = DistanceCalculator.Distance(a, b, model);
+    var tune = TuneCatalog.For(PlaceCatalog.FindCountry(b)?.Name); // the tune belongs to the destination country
+
+    errorKey = null;
+    calculation = new Calculation(distance, model, tune);
+    map = new MapRequest(a, b, PlaceLabel(a), PlaceLabel(b),
+        $"{PlaceLabel(a)} – {PlaceLabel(b)}: {Format(calculation.RoundedKilometers)} {L["km"]}");
+
+    await Audio.PlayAsync(tune.Render());
+  }
+
+  private void Fail(string key)
+  {
+    errorKey = key;
+    calculation = null;
+  }
+
+  /// <summary>Anything that changes the inputs makes the shown result stale.</summary>
+  private void ClearOutput()
+  {
+    errorKey = null;
+    calculation = null;
+  }
+
+  private void Reset()
+  {
+    from.Clear();
+    to.Clear();
+    ClearOutput();
+  }
+
+  private void CloseMap() => map = null;
+
+  private string PlaceLabel(GeoPoint point) =>
+      PlaceCatalog.FindCity(point) is { } city ? L.Place(city.Name) : point.ToString();
+
+  private static string Format(double value) => value.ToString("0.###", CultureInfo.InvariantCulture);
+
+  private sealed record Calculation(DistanceResult Distance, Ellipsoid Model, Tune Tune)
+  {
+    public double RoundedKilometers => Math.Round(Distance.Kilometers, 3);
+
+    public double RoundedMiles => Math.Round(Distance.Miles, 3);
+  }
+}

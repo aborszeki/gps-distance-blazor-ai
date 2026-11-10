@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>GeoDistance.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GeoDistance.Domain\GeoDistance.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

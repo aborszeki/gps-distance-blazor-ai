@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+  <!-- dark red compass; thin cream outline keeps it visible on dark areas -->
+  <circle cx="16" cy="16" r="11" fill="none" stroke="#f6ecc9" stroke-width="3.6"/>
+  <circle cx="16" cy="16" r="11" fill="none" stroke="#7a1c1c" stroke-width="1.5"/>
+  <path d="M16 1.5L19.2 12.8L30.5 16L19.2 19.2L16 30.5L12.8 19.2L1.5 16L12.8 12.8Z" fill="#7a1c1c" stroke="#f6ecc9" stroke-width="1" stroke-linejoin="round"/>
+  <path d="M16 1.5L19.2 12.8L16 16L12.8 12.8Z" fill="#5a1010"/>
+  <circle cx="16" cy="16" r="1.8" fill="#f6ecc9"/>
+</svg>

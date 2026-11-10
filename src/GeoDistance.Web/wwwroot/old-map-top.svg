@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 845" preserveAspectRatio="xMidYMid slice">
+  <!-- Decorations drawn above the real continents: voyages, ships, compass rose, sea names, cartouche, paper grain, frame. -->
+  <defs>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="3"/>
+      <feColorMatrix values="0 0 0 0 .42  0 0 0 0 .3  0 0 0 0 .15  0 0 0 .09 0"/>
+    </filter>
+  </defs>
+
+  <!-- dotted voyages -->
+  <g fill="none" stroke="#8a5a2b" stroke-opacity=".4" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="1 9">
+    <path d="M395 440C450 410 520 390 590 365"/>
+    <path d="M700 520C780 600 860 640 960 650"/>
+    <path d="M150 560C230 520 300 540 360 600"/>
+  </g>
+
+  <!-- ships -->
+  <g fill="#dccb9c" stroke="#8a6a3c" stroke-opacity=".65" stroke-width="1.6" stroke-linejoin="round">
+    <path d="M440 470l36 0l-6 14l-24 0z"/><path d="M458 440v30M458 442l16 12h-16z"/>
+    <path d="M880 660l30 0l-5 12l-20 0z"/><path d="M895 635v25M895 637l13 10h-13z"/>
+    <path d="M120 480l30 0l-5 12l-20 0z"/><path d="M135 455v25M135 457l13 10h-13z"/>
+  </g>
+
+  <!-- compass rose -->
+  <g transform="translate(190 690)" stroke="#7a5a30" stroke-opacity=".6" stroke-width="1.4" fill="#e3d2a2" fill-opacity=".8">
+    <circle r="70" fill="none" stroke-dasharray="3 4"/>
+    <circle r="48" fill="none"/>
+    <path d="M0 -90L12 -12L90 0L12 12L0 90L-12 12L-90 0L-12 -12Z"/>
+    <path d="M0 -52L30 -30L52 0L30 30L0 52L-30 30L-52 0L-30 -30Z" fill="#c9ad76" fill-opacity=".45" transform="rotate(45) scale(.8)"/>
+    <circle r="5" fill="#8a5a2b" fill-opacity=".55"/>
+    <text y="-98" text-anchor="middle" font-size="20" font-family="Georgia, serif" font-style="italic" fill="#6b4a25" fill-opacity=".75" stroke="none">N</text>
+  </g>
+
+  <!-- sea names -->
+  <g font-family="Georgia, 'Times New Roman', serif" font-style="italic" fill="#7a5a30" fill-opacity=".55" letter-spacing="6" font-size="20">
+    <text x="395" y="520" transform="rotate(-18 395 520)">OCEANVS ATLANTICVS</text>
+    <text x="790" y="690" transform="rotate(6 790 690)">OCEANVS INDICVS</text>
+    <text x="20" y="560" transform="rotate(-8 20 560)">OCEANVS PACIFICVS</text>
+  </g>
+
+  <!-- title cartouche -->
+  <g transform="translate(700 800)" fill="none" stroke="#8a6a3c" stroke-opacity=".55" stroke-width="2">
+    <rect x="0" y="-26" width="260" height="46" rx="4"/>
+    <rect x="5" y="-21" width="250" height="36" rx="2" stroke-width="1"/>
+    <text x="130" y="3" text-anchor="middle" font-size="16" font-family="Georgia, serif" letter-spacing="3" fill="#7a5a30" fill-opacity=".7" stroke="none">Nova Orbis Tabula</text>
+  </g>
+
+  <!-- paper grain + frame -->
+  <rect width="1200" height="845" filter="url(#grain)"/>
+  <rect x="14" y="14" width="1172" height="817" fill="none" stroke="#8a6a3c" stroke-opacity=".45" stroke-width="3"/>
+  <rect x="24" y="24" width="1152" height="797" fill="none" stroke="#8a6a3c" stroke-opacity=".3" stroke-width="1"/>
+</svg>

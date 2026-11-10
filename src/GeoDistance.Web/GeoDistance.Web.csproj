@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <RootNamespace>GeoDistance.Web</RootNamespace>
+    <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GeoDistance.Domain\GeoDistance.Domain.csproj" />
+    <ProjectReference Include="..\GeoDistance.Core\GeoDistance.Core.csproj" />
+  </ItemGroup>
+
+</Project>

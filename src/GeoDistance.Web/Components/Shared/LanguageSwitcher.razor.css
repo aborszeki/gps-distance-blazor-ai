@@ -1,0 +1,39 @@
+.langs {
+  display: flex;
+  justify-content: flex-end;
+  gap: .5rem;
+  margin-bottom: .5rem;
+}
+
+.flag {
+  padding: 0;
+  width: 36px;
+  height: 24px;
+  border: 2px solid var(--border);
+  background: none;
+  opacity: .55;
+  line-height: 0;
+  border-radius: var(--curl-b);
+  overflow: hidden;
+  filter: url(#wobbleSmall);
+}
+
+.flag::before {
+  content: none; /* flags are not drawn as brown buttons */
+}
+
+.flag:hover {
+  opacity: .9;
+}
+
+.flag.active {
+  opacity: 1;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 2px var(--gold);
+}
+
+.flag svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}

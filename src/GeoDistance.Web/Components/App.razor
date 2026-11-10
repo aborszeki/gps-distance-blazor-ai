@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base href="/" />
+  <ResourcePreloader />
+  <link rel="stylesheet" href="@Assets["app.css"]" />
+  <link rel="stylesheet" href="@Assets["GeoDistance.Web.styles.css"]" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <ImportMap />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <HeadOutlet @rendermode="InteractiveServerNoPrerender" />
+</head>
+
+<body>
+  <Routes @rendermode="InteractiveServerNoPrerender" />
+  <ReconnectModal />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="@Assets["_framework/blazor.web.js"]"></script>
+</body>
+
+</html>
+
+@code {
+  // The page needs browser APIs (localStorage, Web Audio, Leaflet) from the first render, so it is not pre-rendered.
+  private static readonly IComponentRenderMode InteractiveServerNoPrerender = new InteractiveServerRenderMode(prerender: false);
+}

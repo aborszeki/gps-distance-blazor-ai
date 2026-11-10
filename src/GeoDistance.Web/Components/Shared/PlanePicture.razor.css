@@ -1,0 +1,24 @@
+svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.a { transform-box: view-box; }
+
+.fly { animation: fly 2.4s ease-in-out infinite; }
+.scarf { animation: scarf .5s ease-in-out infinite; }
+.cloud-a { animation: cloud 7s ease-in-out infinite; }
+.cloud-b { animation: cloud 9s ease-in-out infinite reverse; }
+.lines { animation: lines .45s steps(2, jump-none) infinite; }
+.blink { animation: blink 1.6s ease-in-out infinite; }
+
+@keyframes fly { 0%, 100% { transform: translateY(1px) rotate(1.5deg); } 50% { transform: translateY(-3px) rotate(-2.5deg); } }
+@keyframes scarf { 0%, 100% { transform: rotate(3deg) translateY(0); } 50% { transform: rotate(-5deg) translateY(-1.5px); } }
+@keyframes cloud { 0%, 100% { transform: translateX(-9px); } 50% { transform: translateX(9px); } }
+@keyframes lines { 0% { opacity: 1; transform: translateX(0); } 100% { opacity: .3; transform: translateX(-3px); } }
+@keyframes blink { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; }
+}

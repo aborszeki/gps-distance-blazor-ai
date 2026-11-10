@@ -1,0 +1,63 @@
+@inherits LocalizedComponentBase
+@inject MapInterop Map
+@inject IRouteInterpolator Route
+
+@* Modal with a Leaflet map: both places joined by a dotted great-circle line. Closes with the button, Escape or a click outside. *@
+@if (Request is { } request)
+{
+  <div class="modal" @onclick="CloseAsync">
+    <div class="modal-box surface-large" role="dialog" aria-modal="true" aria-labelledby="map-title" @onclick:stopPropagation>
+      <div class="modal-head">
+        <h2 id="map-title">@request.Title</h2>
+        <button type="button" class="close" @onclick="CloseAsync">@L["close"]</button>
+      </div>
+      <div class="map" @ref="mapElement"></div>
+    </div>
+  </div>
+}
+
+@code {
+  private ElementReference mapElement;
+  private MapRequest? drawn;
+  private DotNetObjectReference<MapDialogCallbacks>? callbacks;
+
+  /// <summary>The map to show; <c>null</c> hides the dialog.</summary>
+  [Parameter]
+  public MapRequest? Request { get; set; }
+
+  [Parameter]
+  public EventCallback OnClose { get; set; }
+
+  protected override void OnInitialized()
+  {
+    base.OnInitialized();
+    callbacks = DotNetObjectReference.Create(new MapDialogCallbacks(CloseAsync));
+  }
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (Request is not null && !ReferenceEquals(Request, drawn))
+    {
+      drawn = Request;
+      IReadOnlyList<MapMarker> markers =
+      [
+        new(Request.From.Latitude, Request.From.Longitude, Request.FromLabel),
+        new(Request.To.Latitude, Request.To.Longitude, Request.ToLabel),
+      ];
+      await Map.ShowAsync(mapElement, Route.Interpolate(Request.From, Request.To), markers, callbacks!);
+    }
+    else if (Request is null && drawn is not null)
+    {
+      drawn = null;
+      await Map.DestroyAsync();
+    }
+  }
+
+  private Task CloseAsync() => OnClose.InvokeAsync();
+
+  public override void Dispose()
+  {
+    callbacks?.Dispose();
+    base.Dispose();
+  }
+}

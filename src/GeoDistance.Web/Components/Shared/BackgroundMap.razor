@@ -1,0 +1,17 @@
+@inject BackgroundInterop Background
+
+@* Real-world continents (drawn by js/background.js) under the decorations (old-map-top.svg). *@
+<div class="bg-land" aria-hidden="true" @ref="land"></div>
+<div class="bg-top" aria-hidden="true"></div>
+
+@code {
+  private ElementReference land;
+
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    if (firstRender)
+    {
+      await Background.DrawWorldAsync(land);
+    }
+  }
+}

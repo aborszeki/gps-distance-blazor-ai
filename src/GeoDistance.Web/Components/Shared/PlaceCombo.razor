@@ -1,0 +1,86 @@
+@inherits LocalizedComponentBase
+@inject IPlaceCatalog PlaceCatalog
+
+@* A combobox: type "lat, lon" or pick a city from the continent > country > city tree. A picked city keeps its name in the box. *@
+<div class="field combo @(isOpen ? "open" : null)" @onkeydown="OnKeyDown">
+  @if (isOpen)
+  {
+    <div class="backdrop" @onclick="Close"></div>
+  }
+
+  <input id="@Id"
+         autocomplete="off"
+         placeholder="@Placeholder"
+         value="@DisplayText"
+         title="@Tooltip"
+         @onfocus="Open"
+         @onchange="OnChange" />
+  <button type="button" class="arrow" aria-label="@L["showList"]" @onclick="Toggle">&#9662;</button>
+
+  <div class="panel" role="listbox" hidden="@(!isOpen)">
+    @foreach (var continent in PlaceCatalog.Continents)
+    {
+      <details class="continent">
+        <summary>@L.Place(continent.Name)</summary>
+        @foreach (var country in continent.Countries)
+        {
+          <details class="country">
+            <summary>@L.Place(country.Name)</summary>
+            @foreach (var city in country.Cities)
+            {
+              <div class="city" role="option" @onclick="() => PickAsync(city)">@L.Place(city.Name)<small>@city.Location</small></div>
+            }
+          </details>
+        }
+      </details>
+    }
+  </div>
+</div>
+
+@code {
+  private bool isOpen;
+
+  [Parameter, EditorRequired]
+  public string Id { get; set; } = "";
+
+  [Parameter, EditorRequired]
+  public LocationInput Input { get; set; } = default!;
+
+  [Parameter]
+  public string? Placeholder { get; set; }
+
+  /// <summary>Raised when the user picked a city or edited the text.</summary>
+  [Parameter]
+  public EventCallback OnChanged { get; set; }
+
+  private string DisplayText => Input.City is { } city ? L.Place(city.Name) : Input.Text;
+
+  private string? Tooltip => Input.City?.Location.ToString();
+
+  private void Open() => isOpen = true;
+
+  private void Close() => isOpen = false;
+
+  private void Toggle() => isOpen = !isOpen;
+
+  private void OnKeyDown(KeyboardEventArgs e)
+  {
+    if (e.Key == "Escape")
+    {
+      Close();
+    }
+  }
+
+  private async Task OnChange(ChangeEventArgs e)
+  {
+    Input.Type(e.Value?.ToString()); // typing replaces a picked city
+    await OnChanged.InvokeAsync();
+  }
+
+  private async Task PickAsync(City city)
+  {
+    Input.Pick(city);
+    Close();
+    await OnChanged.InvokeAsync();
+  }
+}

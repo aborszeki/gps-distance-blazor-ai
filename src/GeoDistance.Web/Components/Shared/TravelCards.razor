@@ -1,0 +1,72 @@
+@using GeoDistance.Domain.Travel
+@inherits LocalizedComponentBase
+@inject ITravelEstimator Estimator
+
+@* How long the distance takes on foot, by bike, by car and by plane, each with an animated cartoon. *@
+<div class="modes">
+  @foreach (var mode in Modes)
+  {
+    <figure class="mode surface-small">
+      @switch (mode)
+      {
+        case TravelMode.Walk:
+          <WalkerPicture />
+          break;
+        case TravelMode.Cycle:
+          <CyclistPicture />
+          break;
+        case TravelMode.Car:
+          <CarPicture />
+          break;
+        case TravelMode.Plane:
+          <PlanePicture />
+          break;
+      }
+      <div class="how">@L[ModeKey(mode)]</div>
+      <div class="time">@Format(Estimator.Estimate(Kilometers, mode))</div>
+      <div class="speed">~@Estimator.SpeedKmh(mode) km/h</div>
+    </figure>
+  }
+</div>
+
+@code {
+  private static readonly TravelMode[] Modes = [TravelMode.Walk, TravelMode.Cycle, TravelMode.Car, TravelMode.Plane];
+
+  /// <summary>The (rounded) distance shown to the user.</summary>
+  [Parameter, EditorRequired]
+  public double Kilometers { get; set; }
+
+  private static string ModeKey(TravelMode mode) => mode switch
+  {
+    TravelMode.Walk => "walk",
+    TravelMode.Cycle => "cycle",
+    TravelMode.Car => "car",
+    _ => "plane",
+  };
+
+  private string Format(TravelDuration duration)
+  {
+    if (duration.IsUnderOneMinute)
+    {
+      return $"< 1 {L["min"]}";
+    }
+
+    var parts = new List<string>(3);
+    if (duration.Days > 0)
+    {
+      parts.Add($"{duration.Days} {L["d"]}");
+    }
+
+    if (duration.Hours > 0)
+    {
+      parts.Add($"{duration.Hours} {L["h"]}");
+    }
+
+    if (duration.Minutes > 0)
+    {
+      parts.Add($"{duration.Minutes} {L["min"]}");
+    }
+
+    return string.Join(' ', parts);
+  }
+}

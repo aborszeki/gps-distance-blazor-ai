@@ -1,0 +1,91 @@
+.combo.open {
+  z-index: 11; /* above the click-away backdrop of its own and other widgets */
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+
+.combo input {
+  position: relative;
+  z-index: 2;
+  padding-right: 2.6rem;
+}
+
+.arrow {
+  position: absolute;
+  z-index: 2;
+  right: .35rem;
+  top: .3rem;
+  bottom: .3rem;
+  width: 1.8rem;
+  padding: 0;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 0;
+  border-left: 1px dotted var(--border);
+  border-radius: var(--curl-b);
+}
+
+.arrow::before {
+  content: none; /* just an arrow, not a brown button */
+}
+
+.arrow:hover {
+  background: rgba(192, 138, 46, .28);
+}
+
+.panel {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  top: 100%;
+  max-height: 18rem;
+  overflow-y: auto;
+  margin-top: 4px;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--curl-a);
+  box-shadow: 0 0 10px rgba(59, 42, 26, .4), 3px 5px 12px rgba(59, 42, 26, .3);
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+.panel summary {
+  padding: .25rem .5rem;
+  user-select: none;
+}
+
+.panel summary:hover,
+.city:hover {
+  background: #ecd9a6;
+}
+
+.continent > summary {
+  font-weight: bold;
+  font-variant: small-caps;
+  background: #e2cb94;
+}
+
+.country {
+  margin-left: 1rem;
+}
+
+.country > summary {
+  font-style: italic;
+}
+
+.city {
+  margin-left: 2.2rem;
+  padding: .25rem .5rem;
+}
+
+.city small {
+  color: var(--ink-faint);
+  margin-left: .4rem;
+}

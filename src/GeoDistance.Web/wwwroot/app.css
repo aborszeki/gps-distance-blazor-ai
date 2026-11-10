@@ -1,0 +1,162 @@
+/* Global theme: parchment palette, compass cursor, background layers and the shared "soft, slightly curly" box look.
+   Component-specific rules live next to their components (*.razor.css). */
+
+:root {
+  --ink: #3b2a1a;
+  --ink-soft: #5a3414;
+  --ink-faint: #7a5a3a;
+  --parchment: #f6ecc9;
+  --paper: #e8d9b0;
+  --cream: #fffaf0;
+  --brown: #7a4a22;
+  --border: #8a5a2b;
+  --gold: #c08a2e;
+  --error: #8b1a1a;
+
+  /* irregular corner radii give the boxes their hand-drawn look */
+  --curl-a: 22px 8px 26px 10px / 10px 24px 8px 22px;
+  --curl-b: 14px 5px 16px 7px / 7px 15px 5px 16px;
+}
+
+body {
+  background: var(--paper) url("old-map.svg") center / cover no-repeat fixed;
+  color: var(--ink);
+  font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Times New Roman", serif;
+  margin: 0;
+  padding: 2rem 1rem;
+}
+
+/* dark red compass as the mouse cursor everywhere (incl. buttons, inputs and the map popup) */
+*, *::before, *::after {
+  cursor: url("compass-cursor.svg") 16 16, crosshair !important;
+}
+
+/* background layers: paper (body) < real continents < decorations < page */
+.bg-land, .bg-top {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bg-land { z-index: -2; }
+.bg-land svg { width: 100%; height: 100%; display: block; }
+.bg-top { z-index: -1; background: url("old-map-top.svg") center / cover no-repeat; }
+
+/* ---- soft, slightly curly shapes ----
+   Boxes draw their look on a ::before layer that is wobbled + blurred by an SVG filter (see SvgFilters.razor),
+   so the edges are blurry and wavy while the text on top stays crisp. */
+
+.surface-large, .surface-small { position: relative; isolation: isolate; }
+
+.surface-large::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--parchment);
+  border: 3px double #6b4423;
+  border-radius: var(--curl-a);
+  box-shadow: 0 0 0 6px var(--paper), 0 0 0 8px #6b4423, 4px 6px 18px rgba(59, 42, 26, .45);
+  filter: url(#wobble);
+}
+
+.surface-small::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--curl-a);
+  box-shadow: 0 1px 6px rgba(59, 42, 26, .3);
+  filter: url(#wobbleSmall);
+}
+
+/* text input / drop-down frame */
+.field { position: relative; }
+
+.field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: var(--curl-a);
+  box-shadow: inset 0 1px 5px rgba(59, 42, 26, .25), 0 0 6px rgba(192, 138, 46, .3);
+  filter: url(#wobbleSmall);
+}
+
+.field:focus-within::before {
+  border-color: var(--gold);
+  box-shadow: inset 0 1px 5px rgba(59, 42, 26, .25), 0 0 10px rgba(192, 138, 46, .85);
+}
+
+.field input, .field select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: .55rem .7rem;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  outline: none; /* the focus glow is drawn by .field::before */
+}
+
+button {
+  position: relative;
+  isolation: isolate;
+  padding: .55rem 1.3rem;
+  font: inherit;
+  font-variant: small-caps;
+  letter-spacing: .06em;
+  color: #fbf1d4;
+  background: transparent;
+  border: 0;
+}
+
+button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--brown);
+  border: 2px solid #a8742f;
+  border-radius: var(--curl-a);
+  box-shadow: 0 2px 6px rgba(59, 42, 26, .45), inset 0 1px 4px rgba(255, 235, 190, .35);
+  filter: url(#wobbleSmall);
+}
+
+button:hover::before { background: #8d5a2c; }
+button:active::before { transform: translateY(1px); }
+
+.button-secondary { color: var(--ink); }
+.button-secondary::before { background: #b89358; border-color: #d3b27a; }
+.button-secondary:hover::before { background: #c7a468; }
+
+.error { color: var(--error); }
+
+#blazor-error-ui {
+  background: var(--parchment);
+  border-top: 2px solid var(--border);
+  bottom: 0;
+  box-shadow: 0 -1px 2px rgba(0, 0, 0, .2);
+  box-sizing: border-box;
+  display: none;
+  left: 0;
+  padding: .6rem 1.25rem .7rem 1.25rem;
+  position: fixed;
+  width: 100%;
+  z-index: 2000;
+}
+
+#blazor-error-ui .dismiss {
+  position: absolute;
+  right: .75rem;
+  top: .5rem;
+}

@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/GeoDistance.Domain/GeoDistance.Domain.csproj" />
+    <Project Path="src/GeoDistance.Core/GeoDistance.Core.csproj" />
+    <Project Path="src/GeoDistance.Web/GeoDistance.Web.csproj" />
+  </Folder>
+</Solution>

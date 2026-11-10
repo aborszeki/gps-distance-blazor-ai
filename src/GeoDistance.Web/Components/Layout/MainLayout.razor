@@ -1,0 +1,24 @@
+@inherits LayoutComponentBase
+@inject Localizer L
+
+<SvgFilters />
+<BackgroundMap />
+
+@Body
+
+<div id="blazor-error-ui" data-nosnippet>
+  An unhandled error has occurred.
+  <a href="." class="reload">Reload</a>
+  <span class="dismiss">🗙</span>
+</div>
+
+@code {
+  protected override async Task OnAfterRenderAsync(bool firstRender)
+  {
+    // saved / browser language needs JS interop, which is only available once the circuit is up
+    if (firstRender)
+    {
+      await L.InitializeAsync();
+    }
+  }
+}

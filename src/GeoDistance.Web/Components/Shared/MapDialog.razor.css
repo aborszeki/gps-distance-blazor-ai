@@ -1,0 +1,81 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(59, 42, 26, .6);
+  padding: 1rem;
+}
+
+.modal-box {
+  width: min(760px, 100%);
+  padding: 1.1rem 1.4rem 1.4rem;
+  box-sizing: border-box;
+}
+
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: .75rem;
+}
+
+.modal-head h2 {
+  margin: 0;
+  font-weight: normal;
+  font-variant: small-caps;
+  letter-spacing: .08em;
+  color: var(--ink-soft);
+  font-size: 1.2rem;
+}
+
+.close {
+  margin: 0;
+  padding: .2rem .7rem;
+}
+
+.map {
+  height: 420px;
+  border: 2px solid var(--border);
+  background: var(--paper);
+  overflow: hidden;
+  border-radius: var(--curl-a);
+  box-shadow: 0 0 10px rgba(59, 42, 26, .45), inset 0 0 12px rgba(59, 42, 26, .25);
+}
+
+/* Leaflet creates these elements itself, hence ::deep */
+.map ::deep .leaflet-tile-pane {
+  filter: sepia(.9) saturate(.8) hue-rotate(-8deg) brightness(.97) contrast(.95);
+}
+
+.map ::deep .leaflet-control-zoom a {
+  background: var(--parchment);
+  color: var(--ink-soft);
+  border-color: var(--border);
+}
+
+.map ::deep .leaflet-control-attribution {
+  background: rgba(246, 236, 201, .85);
+  color: var(--ink-soft);
+}
+
+.map ::deep .leaflet-control-attribution a {
+  color: var(--brown);
+}
+
+.map ::deep .leaflet-tooltip.map-label {
+  background: var(--parchment);
+  border: 1px solid #6b4423;
+  border-radius: var(--curl-b);
+  color: var(--ink);
+  font-weight: bold;
+  font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  box-shadow: 1px 2px 4px rgba(59, 42, 26, .4);
+}
+
+.map ::deep .leaflet-tooltip-top.map-label::before {
+  border-top-color: #6b4423;
+}

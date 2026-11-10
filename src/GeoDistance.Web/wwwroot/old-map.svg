@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 845" preserveAspectRatio="xMidYMid slice">
+  <!-- Bottom layer of the background: aged paper + graticule (Mercator parallels / meridians).
+       The real continents are drawn above it (see index.html), decorations above those (old-map-top.svg). -->
+  <defs>
+    <radialGradient id="paper" cx="50%" cy="48%" r="75%">
+      <stop offset="0" stop-color="#eee2bd"/>
+      <stop offset=".7" stop-color="#e8d9b0"/>
+      <stop offset="1" stop-color="#d8c590"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="845" fill="url(#paper)"/>
+  <g fill="none" stroke="#b99a62" stroke-opacity=".38" stroke-width="1">
+    <path d="M0 347H1200M0 494H1200M0 600H1200M0 706H1200"/>
+    <path d="M100 0V845M200 0V845M300 0V845M400 0V845M500 0V845M600 0V845M700 0V845M800 0V845M900 0V845M1000 0V845M1100 0V845" stroke-dasharray="2 7"/>
+  </g>
+</svg>
